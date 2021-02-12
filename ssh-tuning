@@ -1,0 +1,22 @@
+## How to reuse the existing ssh-connection to speedup the overall ssh-connectivity-speed at server side
+
+cat << EOF > ~/.ssh/config 
+Host *
+	ControlMaster auto
+	ControlPath  ~/.ssh/sockets/%r@%h-%p
+	ControlPersist 600
+EOF
+
+chmod 600 ~/.ssh/config
+
+mkdir ~/.ssh/sockets
+
+systemctl restart sshd
+
+
+## Ignore DNS at any client host will result in faster connectivity
+
+# cat /etc/ssh/sshd_config | grep DNS
+#UseDNS yes
+
+## Uncomment above line and set it to no followed by a restart of sshd service at client host end

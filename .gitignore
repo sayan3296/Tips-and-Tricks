@@ -1,0 +1,17 @@
+$ cat .gitignore
+test*
+test.yaml
+test*.yaml
+check.yaml
+check*.yaml
+verify.yaml
+verify*.yaml
+*.tar
+*.gz
+.tmp
+.cache
+*.retry
+*.swp
+*.tar.gz
+.vault
+
