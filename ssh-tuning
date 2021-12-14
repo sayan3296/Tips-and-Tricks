@@ -20,3 +20,26 @@ systemctl restart sshd
 #UseDNS yes
 
 ## Uncomment above line and set it to no followed by a restart of sshd service at client host end
+
+
+## A bit more controlled ~/.ssh/config file:
+
+#######################
+Host * !192.168.0.127
+        ControlMaster auto
+        ControlPath  ~/.ssh/sockets/%r@%h-%p
+        ControlPersist 600
+        Compression yes
+        ServerAliveInterval 60
+        ServerAliveCountMax 10
+        UserKnownHostsFile=/dev/null
+        StrictHostKeyChecking=no
+
+Host *
+     UserKnownHostsFile=/dev/null
+     StrictHostKeyChecking=no
+#######################
+
+   -> Using the first Host segment we can ensure to do the exact same thing as initially stated, but we are also disabling HostKeyChecking, Increasing the Alive interval and ensuring that except the IP 192.168.0.127 , for every other SSH connectivity, these settings will be applied.
+
+   -> I usually exclude the IP of supportshell(internal tool) as this trick misbehaves a bit with it.

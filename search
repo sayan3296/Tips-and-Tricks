@@ -1,0 +1,36 @@
+  #!/bin/bash
+  search_dir="."
+  search_string=$1
+ 
+    if [ ! -n "$1" ]
+       then
+        echo "****** Invalid Arguments *******"
+        echo -e "Usage: Search for a string. \n '$0 path search_string'  or  '$0 search_stirng'"
+        exit 0
+    fi
+ 
+    if [ -n "$2" ]
+       then
+         search_string=$2
+         search_dir=$1
+        
+         if [[ "$search_dir" != /* ]]; then
+            search_dir="./$search_dir"
+         fi
+        
+         if [ ! -d "$search_dir" ]; then
+            echo "Directory $search_dir doesn't exists"
+            exit 0
+         fi
+    fi   
+    echo -e ''"\033[1m************** :: Search Results for ${search_string} in Directory ${search_dir}:: ************* \033[0m"
+    find "$search_dir" -type f |egrep -v '\.(svn|png|jpg|jpeg|o|git|so|class|elc|rbx|rbc|log)' 2>/dev/null |while read x;
+  #for x in `find . -type f |egrep -v '\.(svn|png|jpg|jpeg|o|git|so)'`
+    do
+       if [[ `egrep -c -e "$search_string" "$x" 2>/dev/null` -ne 0 ]]
+          then
+            echo -e "\033[1m ------- :: $x :: ----------- \033[0m"
+            egrep -n -e "$search_string" "${x}" --color=always -C 1
+       fi
+    done
+
